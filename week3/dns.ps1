@@ -1,5 +1,10 @@
-param($network, $server) 
+param($network, $server)
 
-foreach ($ip in 1..254){  
-   Resolve-DnsName -DnsOnly "$network,$ip -server $server -ErrorAction Ignore | Select-String -Pattern '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | where {$_.NameHost -eq ".cyber.local"} 
+foreach ($ip in 1..254) {
+    $Results=Resolve-DnsName -DnsOnly "$network.$ip" -Server "$server" -ErrorAction Ignore | Select-Object -ExpandProperty Namehost
+
+
+     if ($Results -ne $null){
+     echo "$network.$ip $Results"  
+     }    
 }
